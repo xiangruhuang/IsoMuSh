@@ -1,5 +1,5 @@
 
-function zoom_out(split)
+function zoom_out(split1, split2)
 % demo: faust 1st person
 %
 restoredefaultpath
@@ -35,12 +35,12 @@ params.dataPreparation.datapath_mat = fullfile(params.rootpath, 'data', datasetn
 %%
 % load dataset
 fprintf('loading (%s, %s)... \n', datasetname, dataname);
-data = load_dataset(params);
+data = load_dataset(params, split1, split2);
 
 % initialisation
 % -- ZoomOut --
 fprintf('\nInitialisation...\n')
 fprintf('\n1) Running ZoomOut for all pairs on (%s, %s)... \n', datasetname, dataname);
-[C, C_map, T, T_map, time_zoomout] = zoomout_wrapper(data, params, split);
+[C, C_map, T, T_map, time_zoomout] = zoomout_wrapper(data, params, split1, split2);
 
 end

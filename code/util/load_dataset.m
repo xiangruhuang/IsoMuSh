@@ -24,7 +24,7 @@
 % You should have received a copy of the GNU Affero General Public License
 % along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
-function data = load_dataset(params)
+function data = load_dataset(params, split1, split2)
 
 data = [];
 
@@ -45,8 +45,17 @@ datafullname = strcat(dataname, '.mat');
 
 try
     datafullpath = fullfile(rootpath, 'data', datasetname, datafullname);
-    load(datafullpath, 'S', 'S_map');
-
+    S = cell(1000, 1);
+    S_map = cell(1000, 1);
+    %load(datafullpath, 'S', 'S_map');
+    for i = 1:1000
+      if (mod(i, 8) == split1) || (mod(i, 8) == split2) || (i == 1)
+        name = num2str(i-1);
+        load(strcat(['/mnt/xrhuang/isomush/data/faust/', name, '.mat']), 'Si', 'S_map_i');
+        S{i} = Si;
+        S_map{i} = S_map_i;
+      end
+    end
 catch ME
     
     fprintf('Fail to load dataset (*.mat)!\n');
@@ -64,9 +73,11 @@ dimLB = size(S{1}.origRes.evecs, 2); % the total number of precomputed eigenfunc
 dimVector = nan(numShape,1);
 phicell = cell(numShape,1);
 for i = 1 : numShape
-    Si = subsample_shape(S{i});
-    dimVector(i) = Si.nv;
-    phicell{i} = Si.evecs;
+    if (mod(i, 8) == split1) || (mod(i, 8) == split2) || (i == 1)
+      Si = subsample_shape(S{i});
+      dimVector(i) = Si.nv;
+      phicell{i} = Si.evecs;
+    end
 end
 
 data.S = S;

@@ -27,7 +27,7 @@
 
 % wrapper to run ZoomOut for all pairs of a specific shape collection
 %
-function [C, C_map, time_zoomout] = zoomout_wrapper(data, params)
+function [C, C_map, T, T_map, time_zoomout] = zoomout_wrapper(data, params, split1, split2)
 
 try
     rootpath = params.rootpath;
@@ -71,9 +71,16 @@ params_zo.k_final   = dimLB;
 
 %% ZoomOut loop
 
+folder = fullfile(rootpath, 'data_init', datasetname);
+if ~isfolder(folder)
+    mkdir(folder)
+end
 % for all source shapes
 for i = 1 : numShape
     
+    if ~(mod(i, 8) == split1)
+      continue
+    end
     S1              = subsample_shape(S{i});
     s1_idx          = extract_number_from_string(S_map{i});
     B1              = S1.evecs(:, 1:params_zo.k_init);
@@ -81,6 +88,9 @@ for i = 1 : numShape
     % for all target shapes 
     for j = (i+1) : numShape
         
+        if ~(mod(j, 8) == split2)
+          continue
+        end
         idx         = idx+1;
         S2          = subsample_shape(S{j});
         s2_idx      = extract_number_from_string(S_map{j});
@@ -142,10 +152,6 @@ fprintf('ZoomOut total runtime : %.2f sec\n', sum(time_zoomout, 'all'));
 
 %% save zoomout results
 datafullnameOut = strcat(dataname,'_zo.mat');
-folder = fullfile(rootpath, 'data_init', datasetname);
-if ~isfolder(folder)
-    mkdir(folder)
-end
 
 save(fullfile(folder,datafullnameOut), 'T_map', 'C_map', 'T', 'C', '-v7.3');
 fprintf('Saved ZoomOut results (%s, %s) under %s.\n', datasetname, dataname, folder);
