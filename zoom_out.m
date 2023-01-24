@@ -1,9 +1,10 @@
+
+function zoom_out(split)
 % demo: faust 1st person
 %
-clear; restoredefaultpath
+restoredefaultpath
 addpath(genpath('./code'))
 addpath(genpath('./eval'))
-
 
 %% choose shape collection
 % For the 1st FAUST person we provide the original *.ply and the corresponding
@@ -40,23 +41,6 @@ data = load_dataset(params);
 % -- ZoomOut --
 fprintf('\nInitialisation...\n')
 fprintf('\n1) Running ZoomOut for all pairs on (%s, %s)... \n', datasetname, dataname);
-[C, C_map, T, T_map, time_zoomout] = zoomout_wrapper(data, params);
+% [C, C_map, T, T_map, time_zoomout] = zoomout_wrapper(data, params, split);
 
-% -- Synchronisation --
-fprintf('\n2) Synchronising pairwise results on (%s, %s)... \n', datasetname, dataname);
-[U, Q] = synchronisation(C, data, params);
-% 
-% 
-% 
-% % IsoMush
-fprintf('\nStarting IsoMuSh...\n')
-fprintf('\nRunning IsoMuSh on (%s, %s)... \n', datasetname, dataname);
-[U, Q] = isomush(U, Q, data, params);
-
-
-
-
-
-
-
-
+end

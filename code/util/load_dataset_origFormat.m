@@ -95,12 +95,14 @@ catch
             symdata = fullfile(rootpath, 'data/faust/sym/faust_registrations.sym.labels');
             sym = load_sym(symdata);
 
-            S = cell(10,1); % each person in Faust has 10 poses.
-            S_map = cell(10,1);
+            S = cell(1000,1); % each person in Faust has 10 poses.
+            S_map = cell(1000,1);
             
-            for j = 0 : 9
-                    shapename = strcat('tr_reg_0', dataname, num2str(j));
+            for j = 0 : 999
+                    shapename = num2str(j, '%03.f');
+                    
                     datafullpath = fullfile(datapath_orig, strcat(shapename, '.ply'));
+                    disp(datafullpath);
                     M = load_ply(datafullpath);
                     S_map{j+1} = shapename;
                     Sj = convert_struct(M);
@@ -114,7 +116,7 @@ catch
                     % figure, visualize_map_on_source('', Sj, '', Sj.sym);
             end
             
-            save(fullfile(datapath_mat, strcat(dataname, '_origRes.mat')), 'S', 'S_map');
+            save(fullfile(datapath_mat, strcat(dataname, '_origRes.mat')), 'S', 'S_map', '-v7.3');
 
 
 
