@@ -41,6 +41,6 @@ data = load_dataset(params);
 % -- ZoomOut --
 fprintf('\nInitialisation...\n')
 fprintf('\n1) Running ZoomOut for all pairs on (%s, %s)... \n', datasetname, dataname);
-% [C, C_map, T, T_map, time_zoomout] = zoomout_wrapper(data, params, split);
+[C, C_map, T, T_map, time_zoomout] = zoomout_wrapper(data, params, split);
 
 end
