@@ -78,9 +78,6 @@ end
 % for all source shapes
 for i = 1 : numShape
     
-    if ~(mod(i, 8) == split1)
-      continue
-    end
     S1              = subsample_shape(S{i});
     s1_idx          = extract_number_from_string(S_map{i});
     B1              = S1.evecs(:, 1:params_zo.k_init);
@@ -88,9 +85,6 @@ for i = 1 : numShape
     % for all target shapes 
     for j = (i+1) : numShape
         
-        if ~(mod(j, 8) == split2)
-          continue
-        end
         idx         = idx+1;
         S2          = subsample_shape(S{j});
         s2_idx      = extract_number_from_string(S_map{j});
@@ -107,11 +101,11 @@ for i = 1 : numShape
         C21_ini = init_C(S{i}.origRes, S{j}.origRes, params_zo.k_init);
         T12_ini = fMAP.fMap2pMap(B2,B1,C21_ini);
         
-        if isfield(S1,'sym')
-            [T12, C21] = zoomOut_refine(S1.evecs, S2.evecs, T12_ini, params_zo, S1.sym, S2.sym, S1, S2);
-        else
-            [T12, C21] = zoomOut_refine(S1.evecs, S2.evecs, T12_ini, params_zo);
-        end
+        
+%             [T12, C21] = zoomOut_refine(S1.evecs, S2.evecs, T12_ini, params_zo, S1.sym, S2.sym, S1, S2);
+%         else
+        [T12, C21] = zoomOut_refine(S1.evecs, S2.evecs, T12_ini, params_zo);
+%         end
         time_zoomout(idx, 1) = toc(t_start);
         
         if (verbose >= 1)

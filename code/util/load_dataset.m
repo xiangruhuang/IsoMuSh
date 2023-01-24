@@ -45,19 +45,21 @@ datafullname = strcat(dataname, '.mat');
 
 try
     datafullpath = fullfile(rootpath, 'data', datasetname, datafullname);
-    S = cell(1000, 1);
-    S_map = cell(1000, 1);
+    S = cell(38, 1);
+    S_map = cell(38, 1);
     %load(datafullpath, 'S', 'S_map');
-    for i = 1:1000
-      if (mod(i, 8) == split1) || (mod(i, 8) == split2) || (i == 1)
+    load('/mnt/xrhuang/isomush/data/faust/0.mat', 'Si', 'S_map_i');
+    S{1} = Si;
+    S_map{1} = S_map_i;
+    data_id = str2num(dataname);
+    for j = 1:37
+        i = data_id*37 + j + 1;
         name = num2str(i-1);
         load(strcat(['/mnt/xrhuang/isomush/data/faust/', name, '.mat']), 'Si', 'S_map_i');
-        S{i} = Si;
-        S_map{i} = S_map_i;
-      end
+        S{j+1} = Si;
+        S_map{j+1} = S_map_i;
     end
 catch ME
-    
     fprintf('Fail to load dataset (*.mat)!\n');
     fprintf('Revert to load the original dataset (*.off, *.ply etc)!\n');
     
@@ -73,11 +75,9 @@ dimLB = size(S{1}.origRes.evecs, 2); % the total number of precomputed eigenfunc
 dimVector = nan(numShape,1);
 phicell = cell(numShape,1);
 for i = 1 : numShape
-    if (mod(i, 8) == split1) || (mod(i, 8) == split2) || (i == 1)
-      Si = subsample_shape(S{i});
-      dimVector(i) = Si.nv;
-      phicell{i} = Si.evecs;
-    end
+  Si = subsample_shape(S{i});
+  dimVector(i) = Si.nv;
+  phicell{i} = Si.evecs;
 end
 
 data.S = S;

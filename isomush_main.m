@@ -1,9 +1,9 @@
+function [outputArg1,outputArg2] = isomush_main(data_id)
 % demo: faust 1st person
 %
 clear; restoredefaultpath
 addpath(genpath('./code'))
 addpath(genpath('./eval'))
-
 
 %% choose shape collection
 % For the 1st FAUST person we provide the original *.ply and the corresponding
@@ -12,7 +12,7 @@ addpath(genpath('./eval'))
 % FAUST dataset, and adapt params.dataPreparation.datapath_orig.
 
 datasetname = 'faust';
-dataname = '4'; % {'0' - '26'};
+dataname = num2str(data_id); % {'0' - '26'};
 params.dataPreparation.datapath_orig = '/mnt/xrhuang/datasets/dfaust1k_test/ply_orig'; %'<ROOT_TO_FAUST_PLY_FILES>';
 
 
@@ -59,4 +59,7 @@ fprintf('\nRunning IsoMuSh on (%s, %s)... \n', datasetname, dataname);
 
 
 
+
+
+end
 
