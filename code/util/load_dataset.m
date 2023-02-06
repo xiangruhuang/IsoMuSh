@@ -47,27 +47,20 @@ try
     datafullpath = fullfile(rootpath, 'data', datasetname, datafullname);
     % disp(datafullpath);
     % load(datafullpath, 'S', 'S_map');
-    n = 100;
+    n = 27;
     S = cell(n, 1);
     S_map = cell(n, 1);
-    for i = 1:n
-      disp([i, n]);
+    load('/mnt/xrhuang/isomush/data/faust/0.mat', 'Si', 'S_map_i');
+    S{1} = Si;
+    S_map{1} = S_map_i;
+    data_id = str2num(dataname);
+    for j = 1:(n-1)
+      i = data_id*(n-1) + j + 1;
       name = num2str(i-1);
       load(strcat(['/mnt/xrhuang/isomush/data/faust/', name, '.mat']), 'Si', 'S_map_i');
-      S{i} = Si;
-      S_map{i} = S_map_i;
+      S{j+1} = Si;
+      S_map{j+1} = S_map_i;
     end
-    %load('/mnt/xrhuang/isomush/data/faust/0.mat', 'Si', 'S_map_i');
-    %S{1} = Si;
-    %S_map{1} = S_map_i;
-    %data_id = str2num(dataname);
-    %for j = 1:n
-    %    i = data_id*37 + j + 1;
-    %    name = num2str(i-1);
-    %    load(strcat(['/mnt/xrhuang/isomush/data/faust/', name, '.mat']), 'Si', 'S_map_i');
-    %    S{j+1} = Si;
-    %    S_map{j+1} = S_map_i;
-    %end
 catch ME
     fprintf('Fail to load dataset (*.mat)!\n');
     fprintf('Revert to load the original dataset (*.off, *.ply etc)!\n');
