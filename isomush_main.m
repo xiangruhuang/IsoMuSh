@@ -1,4 +1,4 @@
-function [outputArg1,outputArg2] = isomush_main()
+function [outputArg1,outputArg2] = isomush_main(id)
 % demo: faust 1st person
 %
 restoredefaultpath
@@ -12,7 +12,7 @@ addpath(genpath('./eval'))
 % FAUST dataset, and adapt params.dataPreparation.datapath_orig.
 
 datasetname = 'faust';
-dataname = '0'; % {'0' - '26'};
+dataname = str2num(id); % '0'; % {'0' - '26'};
 params.dataPreparation.datapath_orig = '/mnt/xrhuang/datasets/dfaust1k_test/ply_orig'; %'<ROOT_TO_FAUST_PLY_FILES>';
 
 
@@ -53,14 +53,6 @@ fprintf('\n2) Synchronising pairwise results on (%s, %s)... \n', datasetname, da
 fprintf('\nStarting IsoMuSh...\n')
 fprintf('\nRunning IsoMuSh on (%s, %s)... \n', datasetname, dataname);
 [U, Q] = isomush(U, Q, data, params);
-
-
-
-
-
-
-
-
 
 end
 
