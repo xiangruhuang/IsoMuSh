@@ -31,7 +31,10 @@ if nargin == 1
     
     k = size(Qcell,1);
     D = size(Qcell{1},2);
+    disp([k, D]);
+    save('Qcell.mat', 'Qcell', '-v7.3');
     W = cell2mat(Qcell);
+    disp(size(W));
     
 elseif nargin == 3
     

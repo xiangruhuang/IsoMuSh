@@ -33,7 +33,7 @@ function R = projectOntoStiefelBlockwise(R2, k, detEqualsOne)
     for i=1:k
         idx = ((i-1)*D+1):(i*D);
         %         Ri = R(idx,:);
-        R2i = R2(idx,:);
+        R2i = R2(idx,:); % (100, 100)
         [u,~,v] = svd(R2i, 'econ');
         if ( detEqualsOne )
             R(idx,:) = u*diag([ones(1, D-1), det(u*v')])*v';

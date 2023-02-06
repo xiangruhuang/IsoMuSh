@@ -1,7 +1,7 @@
-function [outputArg1,outputArg2] = isomush_main(data_id)
+function [outputArg1,outputArg2] = isomush_main()
 % demo: faust 1st person
 %
-clear; restoredefaultpath
+restoredefaultpath
 addpath(genpath('./code'))
 addpath(genpath('./eval'))
 
@@ -12,7 +12,7 @@ addpath(genpath('./eval'))
 % FAUST dataset, and adapt params.dataPreparation.datapath_orig.
 
 datasetname = 'faust';
-dataname = num2str(data_id); % {'0' - '26'};
+dataname = '0'; % {'0' - '26'};
 params.dataPreparation.datapath_orig = '/mnt/xrhuang/datasets/dfaust1k_test/ply_orig'; %'<ROOT_TO_FAUST_PLY_FILES>';
 
 
@@ -40,6 +40,7 @@ data = load_dataset(params);
 % -- ZoomOut --
 fprintf('\nInitialisation...\n')
 fprintf('\n1) Running ZoomOut for all pairs on (%s, %s)... \n', datasetname, dataname);
+% load('data_init/faust/0_zo.mat', 'C');
 [C, C_map, T, T_map, time_zoomout] = zoomout_wrapper(data, params);
 
 % -- Synchronisation --

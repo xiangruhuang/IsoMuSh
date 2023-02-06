@@ -136,28 +136,28 @@ fprintf('Saved IsoMuSh matches (%s, %s) under the path: %s.\n', datasetname, dat
 
 %% visualisation
 % plot the final matching of the first 5 pairs
-if (verbose >= 2)
-    
-    figure;
-    subplot(2,3,1); 
-    visualize_map_on_source(subsample_shape(S{2}), subsample_shape(S{1}), perm2T(P{2,1})); 
-    title(strcat('IsoMuSh-', dataname, ' color legend'));
-    
-    for i = 2:6
-        subplot(2,3,i); 
-        visualize_map_on_target(subsample_shape(S{i}), subsample_shape(S{1}), perm2T(P{i,1}));
-        if ( i >= numShape )
-            break;
-        end
-    end
-
-end
-drawnow
+% if (verbose >= 2)
+%     
+%     figure;
+%     subplot(2,3,1); 
+%     visualize_map_on_source(subsample_shape(S{2}), subsample_shape(S{1}), perm2T(P{2,1})); 
+%     title(strcat('IsoMuSh-', dataname, ' color legend'));
+%     
+%     for i = 2:6
+%         subplot(2,3,i); 
+%         visualize_map_on_target(subsample_shape(S{i}), subsample_shape(S{1}), perm2T(P{i,1}));
+%         if ( i >= numShape )
+%             break;
+%         end
+%     end
+% 
+% end
+% drawnow
 
 %% evaluate pck
 % pck
-errorfolder = fullfile(folder, 'errors');
-evaluate_pck_isomush(datasetname, dataname, matchfolder, params)
-plot_pck_isomush(datasetname, dataname, errorfolder, params)
+% errorfolder = fullfile(folder, 'errors');
+% evaluate_pck_isomush(datasetname, dataname, matchfolder, params)
+% plot_pck_isomush(datasetname, dataname, errorfolder, params)
 
 end

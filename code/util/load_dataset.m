@@ -24,7 +24,7 @@
 % You should have received a copy of the GNU Affero General Public License
 % along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
-function data = load_dataset(params, split1, split2)
+function data = load_dataset(params)
 
 data = [];
 
@@ -45,20 +45,29 @@ datafullname = strcat(dataname, '.mat');
 
 try
     datafullpath = fullfile(rootpath, 'data', datasetname, datafullname);
-    S = cell(38, 1);
-    S_map = cell(38, 1);
-    %load(datafullpath, 'S', 'S_map');
-    load('/mnt/xrhuang/isomush/data/faust/0.mat', 'Si', 'S_map_i');
-    S{1} = Si;
-    S_map{1} = S_map_i;
-    data_id = str2num(dataname);
-    for j = 1:37
-        i = data_id*37 + j + 1;
-        name = num2str(i-1);
-        load(strcat(['/mnt/xrhuang/isomush/data/faust/', name, '.mat']), 'Si', 'S_map_i');
-        S{j+1} = Si;
-        S_map{j+1} = S_map_i;
+    % disp(datafullpath);
+    % load(datafullpath, 'S', 'S_map');
+    n = 100;
+    S = cell(n, 1);
+    S_map = cell(n, 1);
+    for i = 1:n
+      disp([i, n]);
+      name = num2str(i-1);
+      load(strcat(['/mnt/xrhuang/isomush/data/faust/', name, '.mat']), 'Si', 'S_map_i');
+      S{i} = Si;
+      S_map{i} = S_map_i;
     end
+    %load('/mnt/xrhuang/isomush/data/faust/0.mat', 'Si', 'S_map_i');
+    %S{1} = Si;
+    %S_map{1} = S_map_i;
+    %data_id = str2num(dataname);
+    %for j = 1:n
+    %    i = data_id*37 + j + 1;
+    %    name = num2str(i-1);
+    %    load(strcat(['/mnt/xrhuang/isomush/data/faust/', name, '.mat']), 'Si', 'S_map_i');
+    %    S{j+1} = Si;
+    %    S_map{j+1} = S_map_i;
+    %end
 catch ME
     fprintf('Fail to load dataset (*.mat)!\n');
     fprintf('Revert to load the original dataset (*.off, *.ply etc)!\n');

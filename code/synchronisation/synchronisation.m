@@ -63,6 +63,7 @@ I       = speye(dimLB);
 idx=1;
 for i = 1 : numShape
     
+    disp([i, numShape]);
     Qcell{i,i} = I;
     
     for j = i+1 : numShape
@@ -74,6 +75,8 @@ for i = 1 : numShape
         bandwidth   = 6;
         bands       = -bandwidth : bandwidth;
         M           = spdiags(ones(dimLB, numel(bands)), bands, dimLB, dimLB);
+        disp(size(Cij));
+        disp(size(M));
         Cij         = full(Cij.*M);
         
         Qcell{i,j}  = projectOntoStiefelBlockwise(Cij, 1, 0);
@@ -134,24 +137,24 @@ fprintf('Saved synchronisation results (%s, %s) under %s.\n', datasetname, datan
 
 %% visualisation
 % plot the final matching of the first 5 pairs
-if (verbose >= 2)
-    
-    [~, P] = decode_permutation_to_universe(U', dimVector);
-    
-    figure;
-    subplot(2,3,1); 
-    visualize_map_on_source(subsample_shape(S{2}), subsample_shape(S{1}), perm2T(P{2,1})); 
-    title(strcat('Synch-', dataname, ' color legend'));
-    
-    for i = 2:6
-        subplot(2,3,i); 
-        visualize_map_on_target(subsample_shape(S{i}), subsample_shape(S{1}), perm2T(P{i,1}));
-        if ( i >= numShape )
-            break;
-        end
-    end
-
-end
-drawnow
+% if (verbose >= 2)
+%     
+%     [~, P] = decode_permutation_to_universe(U', dimVector);
+%     
+%     figure;
+%     subplot(2,3,1); 
+%     visualize_map_on_source(subsample_shape(S{2}), subsample_shape(S{1}), perm2T(P{2,1})); 
+%     title(strcat('Synch-', dataname, ' color legend'));
+%     
+%     for i = 2:6
+%         subplot(2,3,i); 
+%         visualize_map_on_target(subsample_shape(S{i}), subsample_shape(S{1}), perm2T(P{i,1}));
+%         if ( i >= numShape )
+%             break;
+%         end
+%     end
+% 
+% end
+% drawnow
 
 end

@@ -27,7 +27,7 @@
 
 % wrapper to run ZoomOut for all pairs of a specific shape collection
 %
-function [C, C_map, T, T_map, time_zoomout] = zoomout_wrapper(data, params, split1, split2)
+function [C, C_map, T, T_map, time_zoomout] = zoomout_wrapper(data, params)
 
 try
     rootpath = params.rootpath;
@@ -57,9 +57,9 @@ end
 
 
 numPair         = numShape * (numShape-1) / 2;
-T_map           = cell(numPair, 2);  
-C_map           = cell(numPair, 2); 
-T               = cell(numPair, 2); 
+T_map           = cell(numPair, 2);
+C_map           = cell(numPair, 2);
+T               = cell(numPair, 2);
 C               = cell(numPair, 2);
 time_zoomout    = nan(numPair, 2);
 
@@ -84,60 +84,69 @@ for i = 1 : numShape
     
     % for all target shapes 
     for j = (i+1) : numShape
-        
         idx         = idx+1;
         S2          = subsample_shape(S{j});
         s2_idx      = extract_number_from_string(S_map{j});
         B2          = S2.evecs(:, 1:params_zo.k_init);
         
-        %
-        T_map{idx,1} = strcat('T_', s1_idx, '_', s2_idx);
-        C_map{idx,1} = strcat('C_', s2_idx, '_', s1_idx);
-        T_map{idx,2} = strcat('T_', s2_idx, '_', s1_idx);
-        C_map{idx,2} = strcat('C_', s1_idx, '_', s2_idx);
-        %
-        % ZoomOut pair i->j
-        t_start = tic;
-        C21_ini = init_C(S{i}.origRes, S{j}.origRes, params_zo.k_init);
-        T12_ini = fMAP.fMap2pMap(B2,B1,C21_ini);
-        
-        
-%             [T12, C21] = zoomOut_refine(S1.evecs, S2.evecs, T12_ini, params_zo, S1.sym, S2.sym, S1, S2);
-%         else
-        [T12, C21] = zoomOut_refine(S1.evecs, S2.evecs, T12_ini, params_zo);
-%         end
-        time_zoomout(idx, 1) = toc(t_start);
-        
-        if (verbose >= 1)
-            fprintf('ZoomOut runtime %s -> %s : %.2f sec\n', S_map{i}, S_map{j}, time_zoomout(idx,1));
-        end
-        
-        T{idx,1} = T12;
-        C{idx,1} = C21;
-        
-        % ZoomOut pair j->i
-        t_start = tic;
-        C12_ini = init_C(S{j}.origRes, S{i}.origRes, params_zo.k_init);
-        T21_ini = fMAP.fMap2pMap(B1,B2,C12_ini);
-        
-        if isfield(S1,'sym')
-            [T21, C12] = zoomOut_refine(S2.evecs, S1.evecs, T21_ini, params_zo, S2.sym, S1.sym, S2, S1);
+        if isfile(fullfile(folder,strcat([s1_idx, '_', s2_idx, '.mat'])))
+          load(fullfile(folder,strcat([s1_idx, '_', s2_idx, '.mat'])), 'C12', 'T12', 'C21', 'T21', 'matchings');
+          T{idx,2} = T21;
+          C{idx,2} = C12;
+          T{idx,1} = T12;
+          C{idx,1} = C21;
         else
-            [T21, C12] = zoomOut_refine(S2.evecs, S1.evecs, T21_ini, params_zo);
+          disp('no\n');
+          % 
+          % %
+          % T_map{idx,1} = strcat('T_', s1_idx, '_', s2_idx);
+          % C_map{idx,1} = strcat('C_', s2_idx, '_', s1_idx);
+          % T_map{idx,2} = strcat('T_', s2_idx, '_', s1_idx);
+          % C_map{idx,2} = strcat('C_', s1_idx, '_', s2_idx);
+          % %
+          % % ZoomOut pair i->j
+          % t_start = tic;
+          % C21_ini = init_C(S{i}.origRes, S{j}.origRes, params_zo.k_init);
+          % T12_ini = fMAP.fMap2pMap(B2,B1,C21_ini);
+          % 
+          % 
+  %       %       [T12, C21] = zoomOut_refine(S1.evecs, S2.evecs, T12_ini, params_zo, S1.sym, S2.sym, S1, S2);
+  %       %   else
+          % [T12, C21] = zoomOut_refine(S1.evecs, S2.evecs, T12_ini, params_zo);
+  %       %   end
+          % time_zoomout(idx, 1) = toc(t_start);
+          % 
+          % if (verbose >= 1)
+          %     fprintf('ZoomOut runtime %s -> %s : %.2f sec\n', S_map{i}, S_map{j}, time_zoomout(idx,1));
+          % end
+          % 
+          % T{idx,1} = T12;
+          % C{idx,1} = C21;
+          % 
+          % % ZoomOut pair j->i
+          % t_start = tic;
+          % C12_ini = init_C(S{j}.origRes, S{i}.origRes, params_zo.k_init);
+          % T21_ini = fMAP.fMap2pMap(B1,B2,C12_ini);
+          % 
+          % if isfield(S1,'sym')
+          %     [T21, C12] = zoomOut_refine(S2.evecs, S1.evecs, T21_ini, params_zo, S2.sym, S1.sym, S2, S1);
+          % else
+          %     [T21, C12] = zoomOut_refine(S2.evecs, S1.evecs, T21_ini, params_zo);
+          % end
+          % 
+          % time_zoomout(idx,2) = toc(t_start);
+          % 
+          % if (verbose >= 1)
+          %     fprintf('ZoomOut runtime %s -> %s : %.2f sec\n', S_map{j}, S_map{i}, time_zoomout(idx, 2));
+          % end
+          % 
+          % T{idx,2} = T21;
+          % C{idx,2} = C12;
+          % left=S1.orig_idx;
+          % right=S2.orig_idx(T12);
+          % matchings = [left, right];
+          % save(fullfile(folder,strcat([s1_idx, '_', s2_idx, '.mat'])), 'C12', 'T12', 'C21', 'T21', 'matchings');
         end
-        
-        time_zoomout(idx,2) = toc(t_start);
-        
-        if (verbose >= 1)
-            fprintf('ZoomOut runtime %s -> %s : %.2f sec\n', S_map{j}, S_map{i}, time_zoomout(idx, 2));
-        end
-        
-        T{idx,2} = T21;
-        C{idx,2} = C12;
-        left=S1.orig_idx;
-        right=S2.orig_idx(T12);
-        matchings = [left, right];
-        save(fullfile(folder,strcat([s1_idx, '_', s2_idx, '.mat'])), 'C12', 'T12', 'C21', 'T21', 'matchings');
     end
 end
 
@@ -147,7 +156,7 @@ fprintf('ZoomOut total runtime : %.2f sec\n', sum(time_zoomout, 'all'));
 %% save zoomout results
 datafullnameOut = strcat(dataname,'_zo.mat');
 
-save(fullfile(folder,datafullnameOut), 'T_map', 'C_map', 'T', 'C', '-v7.3');
+% save(fullfile(folder,datafullnameOut), 'T_map', 'C_map', 'T', 'C', '-v7.3');
 fprintf('Saved ZoomOut results (%s, %s) under %s.\n', datasetname, dataname, folder);
 
 %% visualisation
